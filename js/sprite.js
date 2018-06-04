@@ -1,16 +1,16 @@
 function Sprite() {
   //nave principal
-    this.x = 250;
-    this.y = 650;
-    this.w = 32;
-    this.h = 32;
+    this.x = 200;
+    this.y = 580;
+    this.w = 50;
+    this.h = 50;
     this.vx = 0;
     this.vy = 0;
     this.ax = 0;
     this.ay = 0;
-    this.cor = "black";
+    this.cor = "#4169E1";
     this.ang = 270;
-  //naves inimigas
+  //asteroides
    this.ix = 100;
    this.iy = 0;
    this.iw = 32;
