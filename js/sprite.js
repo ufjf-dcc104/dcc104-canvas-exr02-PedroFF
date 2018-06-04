@@ -12,7 +12,7 @@ function Sprite() {
     this.ang = 270;
   //asteroides
    this.ix = 100;
-   this.iy = 0;
+   this.iy = 10;
    this.iw = 32;
    this.ih = 32;
    this.ivx = 0;
@@ -40,12 +40,16 @@ Sprite.prototype.desenhaInimigo = function(ctx, key) {
   ctx.drawImage(key, this.ix, this.iy);
 }
 
+Sprite.prototype.desenharVida = function(ctx, key) {
+  ctx.drawImage(key, this.ix, this.iy);
+}
+
 Sprite.prototype.mover = function(dt) {
   this.x = this.x + this.vx*dt;
   this.y = this.y + this.vy*dt;
 }
 
-Sprite.prototype.movimentarInimigos = function(dt) {
+Sprite.prototype.moveInimigos = function(dt) {
   this.iy = this.iy + this.ivy*dt;
 }
 
@@ -57,7 +61,7 @@ Sprite.prototype.impoeLimites = function (x, y, w, h) {
   }
   if(this.x + this.w > x + w)
   {
-    this.x = x + w - this.h;
+    this.x = x + w - this.w;
     this.vx = 0;
   }
   if(this.y < y)
@@ -80,4 +84,25 @@ Sprite.prototype.acertou = function (alvo)
   if (alvo.iy > this.y + this.h) return false;
 
   return true;
+}
+
+Sprite.prototype.colidiuCom = function (alvo) {
+  if (alvo.x + alvo.w < this.ix) return false;
+  if (alvo.x > this.ix + this.iw) return false;
+  if (alvo.y + alvo.h < this.iy) return false;
+  if (alvo.y > this.iy + this.ih) return false;
+
+  return true;
+
+}
+
+Sprite.prototype.limiteInimigos = function (x, y, w, h) {
+  if(this.iy > h)
+  {
+    return true;
+  }
+}
+
+Sprite.prototype.limiteTiros = function (x, y, w, h) {
+  if(this.y < -100 ) return true;
 }
