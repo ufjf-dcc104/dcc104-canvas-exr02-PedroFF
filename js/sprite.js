@@ -33,7 +33,7 @@ Sprite.prototype.desenhar = function(ctx, key) {
 
 Sprite.prototype.desenharTiro = function(ctx, key) {
   ctx.fillStyle = this.cor;
-  ctx.fillRect(this.x + 50,this.y, 5, 20);
+  ctx.fillRect(this.x + 47,this.y, 5, 20);
 }
 
 Sprite.prototype.desenhaInimigo = function(ctx, key) {

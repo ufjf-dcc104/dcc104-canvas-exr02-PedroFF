@@ -28,6 +28,7 @@ for(var e = 0; e < quantInimigos; e++) {
 var imagens = new ImageLibrary();
 imagens.load("nave", "icons/naveP.png");
 imagens.load("vida", "icons/vida.png");
+imagens.load("backg", "icons/background.png");
 imagens.load("inimigo1", "icons/inimigo1.png");
 
 //  --- Sons ---
@@ -48,7 +49,7 @@ function limpaTela()
   ctx.fillStyle = "black";
   ctx.fillRect(0,0, tela.width, tela.height);
   ctx.font="20px Arial";
-  //imagens.draw(ctx,"espaço", 0, 0);
+  imagens.draw(ctx,"backg", 0, 0);
   ctx.fillStyle = "white";
   ctx.fillText("Energia: " + energia, 10,20);
   ctx.fillText("Pontos: " + pontos, 10,50);
