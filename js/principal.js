@@ -35,6 +35,7 @@ var audios = new AudioLibrary();
 audios.load("tiro", "sons/tiro.wav");
 audios.load("vida", "sons/vida.wav");
 audios.load("explosao", "sons/explosao.wav");
+audios.load("hit", "sons/Hit.wav");
 
 //Cria a vida
 var life = new Sprite();
@@ -103,6 +104,7 @@ function passo(t)
     spritesInimigos[i].moveInimigos(dt);
     if(spritesInimigos[i].colidiuCom(sprite))
     {
+      audios.play("hit");
       spritesInimigos[i].iy = 10000;
       spritesInimigos[i].ix = 10000;
       energia--;
