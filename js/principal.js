@@ -1,13 +1,11 @@
 var tela = document.querySelector("#canvas");
 var ctx = tela.getContext('2d');
-ctx.fillStyle = "grey";
-ctx.fillRect(0, 0, tela.width, tela.height)
 
 var dt = anterior = 0;
 var tiros = [];
 var vida = [];
 var quantInimigos = 10;
-var energia = 5;
+var energia = 6;
 var dano = false;
 var pontos = 0;
 var aumentarQuant = 0;
@@ -38,13 +36,41 @@ audios.load("vida", "sons/vida.wav");
 audios.load("explosao", "sons/explosao.wav");
 audios.load("hit", "sons/Hit.wav");
 
-//Cria a vida
 var life = new Sprite();
 life.ix = getRandomIntInclusive(20, 480);
 life.iy = getRandomIntInclusive(-10000, -5000);
 vida.push(life);
 
-function limpaTela()
+
+function telaTitle()
+{
+  ctx.fillStyle = "white";
+  ctx.fillRect(0,0, tela.width, tela.height);
+  imagens.draw(ctx,"backg", 0, 0);
+  ctx.font="Bold 35px Arial";
+  ctx.fillText("Bem-vindo ao Space Shooter", 5, 200);
+  ctx.font="18px Arial";
+  ctx.fillText("O objetivo do jogo é desviar dos asteróides e destruí-los,", 10, 250);
+  ctx.fillText("para isso usará as setas para o movimento lateral e a", 10, 280);
+  ctx.fillText("barra de espaço para disparar os tiros.", 10, 310);
+  ctx.fillText("Bom jogo!",200, 380);
+  ctx.fillText("Aperte Enter para jogar.", 140, 400);
+  addEventListener("keydown", function(event)
+  {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+      telaJogo();
+      requestAnimationFrame(passo);
+    }
+  });
+}
+
+function limpaTela() {
+  ctx.fillStyle = "grey";
+  ctx.fillRect(0, 0, tela.width, tela.height);
+}
+
+function telaJogo()
 {
   ctx.fillStyle = "black";
   ctx.fillRect(0,0, tela.width, tela.height);
@@ -53,8 +79,9 @@ function limpaTela()
   ctx.fillStyle = "white";
   ctx.fillText("Energia: " + energia, 10,20);
   ctx.fillText("Pontos: " + pontos, 10,50);
+  //requestAnimationFrame(passo);
 }
-//Função que gera aleatoriedade
+
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -69,7 +96,15 @@ function passo(t)
     audios.play("explosao");
     ctx.fillStyle = "red";
     ctx.font = "Bold 70px Arial";
-    ctx.fillText("FIM DE JOGO", canvas.width / 16, canvas.height / 2 + 20);
+    ctx.fillText("FIM DE JOGO", 15, tela.height / 2);
+    addEventListener("keydown", function(event)
+    {
+      event.preventDefault();
+      if (event.keyCode === 13) {
+        limpaTela();
+        telaTitle();
+      }
+    });
     return;
   }
 
@@ -147,8 +182,7 @@ function passo(t)
     }
   }
 
-  limpaTela();
-
+  telaJogo();
 
   sprite.desenhar(ctx,imagens.images["nave"]);
 
@@ -166,7 +200,8 @@ function passo(t)
   anterior = t;
   requestAnimationFrame(passo);
 }
-requestAnimationFrame(passo);
+telaTitle();
+
 addEventListener("keydown", function(e)
 {
   switch (e.keyCode) {
