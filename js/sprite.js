@@ -2,8 +2,8 @@ function Sprite() {
   //nave principal
     this.x = 200;
     this.y = 580;
-    this.w = 50;
-    this.h = 50;
+    this.w = 90;
+    this.h = 60;
     this.vx = 0;
     this.vy = 0;
     this.ax = 0;
@@ -13,8 +13,8 @@ function Sprite() {
   //asteroides
    this.ix = 100;
    this.iy = 10;
-   this.iw = 32;
-   this.ih = 32;
+   this.iw = 65;
+   this.ih = 40;
    this.ivx = 0;
    this.ivy = 200;
    this.iax = 0;
@@ -33,7 +33,7 @@ Sprite.prototype.desenhar = function(ctx, key) {
 
 Sprite.prototype.desenharTiro = function(ctx, key) {
   ctx.fillStyle = this.cor;
-  ctx.fillRect(this.x + 14,this.y, 5, 20);
+  ctx.fillRect(this.x + 50,this.y, 5, 20);
 }
 
 Sprite.prototype.desenhaInimigo = function(ctx, key) {
@@ -78,8 +78,8 @@ Sprite.prototype.impoeLimites = function (x, y, w, h) {
 
 Sprite.prototype.acertou = function (alvo)
 {
-  if (alvo.ix + alvo.iw < this.x + 15) return false;
-  if (alvo.ix > this.x + 15 + this.w) return false;
+  if (alvo.ix + alvo.iw < this.x + 50) return false;
+  if (alvo.ix > this.x + 50 + this.w) return false;
   if (alvo.iy + alvo.ih < this.y) return false;
   if (alvo.iy > this.y + this.h) return false;
 

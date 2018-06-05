@@ -30,8 +30,11 @@ imagens.load("nave", "icons/naveP.png");
 imagens.load("vida", "icons/vida.png");
 imagens.load("inimigo1", "icons/inimigo1.png");
 
+//  --- Sons ---
 var audios = new AudioLibrary();
 audios.load("tiro", "sons/tiro.wav");
+audios.load("vida", "sons/vida.wav");
+audios.load("vida", "sons/explosao.wav");
 
 //Cria a vida
 var life = new Sprite();
@@ -59,15 +62,15 @@ function getRandomIntInclusive(min, max) {
 function passo(t)
 {
   dt = (t - anterior)/1000;
-  //Verifica se a energia acabou e chama o Game Over
+
   if (energia <= 0) {
-    //audios.play("explosion");
+    audios.play("explosao");
     ctx.fillStyle = "red";
     ctx.font = "Bold 70px Arial";
     ctx.fillText("FIM DE JOGO", canvas.width / 16, canvas.height / 2 + 20);
     return;
   }
-  //Verifica se os inimigos sairam da tela
+
   for (var i = 0; i < spritesInimigos.length; i++) {
     if (spritesInimigos[i].limiteInimigos(0,0, tela.width, tela.height)) {
       spritesInimigos[i].iy = getRandomIntInclusive(-1000, -200);
@@ -75,14 +78,14 @@ function passo(t)
       spritesInimigos[i].ivy += 5;
     }
   }
-  //Verifica se a vida saiu da tela
+
   for (var i = 0; i < vida.length; i++) {
     if (vida[i].limiteInimigos(0,0, tela.width, tela.height)) {
       vida[i].iy = getRandomIntInclusive(-10000, -5000);
       vida[i].ix = getRandomIntInclusive(20, 480);
     }
   }
-  //Verifica se o tiro saiu da Tela
+
   for (var i = 0; i < tiros.length; i++) {
     if(tiros[i].limiteTiros(0,0,tela.width,tela.height)){
       tiros[i].vy = 0;
@@ -90,38 +93,32 @@ function passo(t)
       tiros[i].y = 900;
     }
   }
-  //Movimenta o sprite principal e impõe limites
+
   sprite.mover(dt);
   sprite.cdTiro = sprite.cdTiro - dt ;
   sprite.impoeLimites(0,0, tela.width, tela.height);
 
-  //Movimenta os inimigos e verifica se houve colisão com o sprite principal
+
   for (var i = 0; i < spritesInimigos.length; i++) {
     spritesInimigos[i].moveInimigos(dt);
     if(spritesInimigos[i].colidiuCom(sprite))
     {
-      spritesInimigos[i].iy = getRandomIntInclusive(-1000, -200);
-      spritesInimigos[i].ix = getRandomIntInclusive(20, 480);
+      spritesInimigos[i].iy = 10000;
+      spritesInimigos[i].ix = 10000;
       energia--;
     }
   }
-  //Movimenta os tiros e verifica se acertou em algum inimigo
+
   for (var i = 0; i < tiros.length; i++) {
     tiros[i].mover(dt);
     for (var j = 0; j < spritesInimigos.length; j++) {
       if(tiros[i].acertou(spritesInimigos[j]))
       {
-        spritesInimigos[j].iy = getRandomIntInclusive(-1000, -200);
-        spritesInimigos[j].ix = getRandomIntInclusive(20, 480);
+        spritesInimigos[j].ix = 10000;
+        spritesInimigos[j].iy = 10000;
         pontos++;
-        /*if(tiroEsp == false)
-        {
-          tiros[i].vy = 0;
-          tiros[i].y = 900;
-          tiros[i].x = 900;
-        }*/
-        //Aumenta a quantidade de inimigos a cada 10 pontos
-        if(aumentarQuant < 10)
+
+        if(aumentarQuant < 15)
         {
           aumentarQuant++;
         }
@@ -135,12 +132,12 @@ function passo(t)
       }
     }
   }
-  //Movimenta o sprite vida e verifica colisões
+
   for (var i = 0; i < vida.length; i++) {
     vida[i].moveInimigos(dt);
     if(vida[i].colidiuCom(sprite))
     {
-      //audios.play("bonus");
+      audios.play("vida");
       vida[i].iy = getRandomIntInclusive(-10000, -5000);
       vida[i].ix = getRandomIntInclusive(20, 480);
       energia++;
@@ -148,7 +145,7 @@ function passo(t)
   }
 
   limpaTela();
-  //Desenha os sprites
+
 
   sprite.desenhar(ctx,imagens.images["nave"]);
 
@@ -160,7 +157,7 @@ function passo(t)
   }
   for (var i = 0; i < vida.length; i++) {
     vida[i].desenharVida(ctx, imagens.images["vida"]);
-    //vida[i].ivy = velocidadeSpritesBonus;
+
   }
 
   anterior = t;
@@ -190,6 +187,7 @@ addEventListener("keydown", function(e)
       tiro.vy = -500;
       tiros.push(tiro);
       sprite.cdTiro = cadencia;
+      audios.play("tiro");
     }
     break;
   }
