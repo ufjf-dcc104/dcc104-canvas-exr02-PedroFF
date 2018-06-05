@@ -34,7 +34,7 @@ imagens.load("inimigo1", "icons/inimigo1.png");
 var audios = new AudioLibrary();
 audios.load("tiro", "sons/tiro.wav");
 audios.load("vida", "sons/vida.wav");
-audios.load("vida", "sons/explosao.wav");
+audios.load("explosao", "sons/explosao.wav");
 
 //Cria a vida
 var life = new Sprite();
