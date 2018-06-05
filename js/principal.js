@@ -1,6 +1,20 @@
 var tela = document.querySelector("#canvas");
 var ctx = tela.getContext('2d');
 
+//  --- Imagens ---
+var imagens = new ImageLibrary();
+imagens.load("nave", "icons/naveP.png");
+imagens.load("vida", "icons/vida.png");
+imagens.load("backg", "icons/background.png");
+imagens.load("inimigo1", "icons/inimigo1.png");
+
+//  --- Sons ---
+var audios = new AudioLibrary();
+audios.load("tiro", "sons/tiro.wav");
+audios.load("vida", "sons/vida.wav");
+audios.load("explosao", "sons/explosao.wav");
+audios.load("hit", "sons/Hit.wav");
+
 var dt = anterior = 0;
 var tiros = [];
 var vida = [];
@@ -15,26 +29,14 @@ var sprite = new Sprite();
 sprite.cdTiro = 0;
 var spritesInimigos = [];
 
-for(var e = 0; e < quantInimigos; e++) {
+for(var e = 0; e < quantInimigos; e++)
+{
   var enemy = new Sprite();
   enemy.ix = getRandomIntInclusive(20, 480);
   enemy.iy = getRandomIntInclusive(-1000, -200);
   spritesInimigos.push(enemy);
 }
 
-//  --- Imagens ---
-var imagens = new ImageLibrary();
-imagens.load("nave", "icons/naveP.png");
-imagens.load("vida", "icons/vida.png");
-imagens.load("backg", "icons/background.png");
-imagens.load("inimigo1", "icons/inimigo1.png");
-
-//  --- Sons ---
-var audios = new AudioLibrary();
-audios.load("tiro", "sons/tiro.wav");
-audios.load("vida", "sons/vida.wav");
-audios.load("explosao", "sons/explosao.wav");
-audios.load("hit", "sons/Hit.wav");
 
 var life = new Sprite();
 life.ix = getRandomIntInclusive(20, 480);
@@ -101,8 +103,10 @@ function passo(t)
     {
       event.preventDefault();
       if (event.keyCode === 13) {
-        limpaTela();
-        telaTitle();
+        energia = 6;
+        quantInimigos = 10;
+        pontos = 0;
+        requestAnimationFrame(telaTitle);
       }
     });
     return;
@@ -200,7 +204,9 @@ function passo(t)
   anterior = t;
   requestAnimationFrame(passo);
 }
-telaTitle();
+
+limpaTela();
+requestAnimationFrame(telaTitle);
 
 addEventListener("keydown", function(e)
 {
