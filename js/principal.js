@@ -6,6 +6,10 @@ var imagens = new ImageLibrary();
 imagens.load("nave", "icons/naveP.png");
 imagens.load("vida", "icons/vida.png");
 imagens.load("backg", "icons/background.png");
+imagens.load("info", "icons/info.png");
+imagens.load("enter", "icons/enter.png");
+imagens.load("voltar", "icons/voltar.png");
+imagens.load("rank", "icons/rank.png");
 imagens.load("inimigo1", "icons/inimigo1.png");
 
 //  --- Sons ---
@@ -55,7 +59,7 @@ function telaSobre() {
   ctx.fillText("para isso usará as setas para o movimento lateral e a", 10, 280);
   ctx.fillText("barra de espaço para disparar os tiros.", 10, 310);
   ctx.fillText("Bom jogo!",200, 380);
-  ctx.fillText("Aperte Enter para jogar.", 140, 400);
+  ctx.fillText("Aperte Enter para voltar ao menu.", 140, 400);
   requestAnimationFrame(passo);
 }
 function telaRank() {
@@ -68,10 +72,13 @@ function telaTitle()
   imagens.draw(ctx,"backg", 0, 0);
   ctx.font="Bold 35px Arial";
   ctx.fillText("Bem-vindo ao Space Shooter", 5, 200);
-  ctx.font="18px Arial";
+  /*ctx.font="18px Arial";
   ctx.fillText("Iniciar Jogo", 200, 250);
   ctx.fillText("Ranking", 200, 280);
-  ctx.fillText("Instruções", 200, 310);
+  ctx.fillText("Instruções", 200, 310);*/
+  imagens.draw(ctx,"enter",150, 300);
+  imagens.draw(ctx,"rank", 150, 400);
+  imagens.draw(ctx,"info", 150, 500);
 
 
   requestAnimationFrame(passo);
