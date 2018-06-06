@@ -44,9 +44,7 @@ life.ix = getRandomIntInclusive(20, 480);
 life.iy = getRandomIntInclusive(-10000, -5000);
 vida.push(life);
 
-
-function telaTitle()
-{
+function telaSobre() {
   ctx.fillStyle = "white";
   ctx.fillRect(0,0, tela.width, tela.height);
   imagens.draw(ctx,"backg", 0, 0);
@@ -58,6 +56,24 @@ function telaTitle()
   ctx.fillText("barra de espaço para disparar os tiros.", 10, 310);
   ctx.fillText("Bom jogo!",200, 380);
   ctx.fillText("Aperte Enter para jogar.", 140, 400);
+  requestAnimationFrame(passo);
+}
+function telaRank() {
+
+}
+function telaTitle()
+{
+  ctx.fillStyle = "white";
+  ctx.fillRect(0,0, tela.width, tela.height);
+  imagens.draw(ctx,"backg", 0, 0);
+  ctx.font="Bold 35px Arial";
+  ctx.fillText("Bem-vindo ao Space Shooter", 5, 200);
+  ctx.font="18px Arial";
+  ctx.fillText("Iniciar Jogo", 200, 250);
+  ctx.fillText("Ranking", 200, 280);
+  ctx.fillText("Instruções", 200, 310);
+
+
   requestAnimationFrame(passo);
 }
 
