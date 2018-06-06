@@ -15,6 +15,7 @@ audios.load("vida", "sons/vida.wav");
 audios.load("explosao", "sons/explosao.wav");
 audios.load("hit", "sons/Hit.wav");
 
+var estado = "menu";
 var dt = anterior = 0;
 var tiros = [];
 var vida = [];
@@ -57,15 +58,9 @@ function telaTitle()
   ctx.fillText("barra de espaço para disparar os tiros.", 10, 310);
   ctx.fillText("Bom jogo!",200, 380);
   ctx.fillText("Aperte Enter para jogar.", 140, 400);
-  addEventListener("keydown", function(event)
-  {
-    event.preventDefault();
-    if (event.keyCode === 13) {
-      telaJogo();
-      requestAnimationFrame(passo);
-    }
-  });
+  requestAnimationFrame(passo);
 }
+
 
 function limpaTela() {
   ctx.fillStyle = "grey";
@@ -81,7 +76,7 @@ function telaJogo()
   ctx.fillStyle = "white";
   ctx.fillText("Energia: " + energia, 10,20);
   ctx.fillText("Pontos: " + pontos, 10,50);
-  //requestAnimationFrame(passo);
+  requestAnimationFrame(passo);
 }
 
 function getRandomIntInclusive(min, max) {
@@ -93,23 +88,28 @@ function getRandomIntInclusive(min, max) {
 function passo(t)
 {
   dt = (t - anterior)/1000;
-
-  if (energia <= 0) {
-    audios.play("explosao");
+  if(estado == "menu"){
+    telaTitle();
+    return;
+  }else if(estado == "jogo"){
+    telaJogo();
+    //return;
+  }else if(estado == "fim"){
     ctx.fillStyle = "red";
     ctx.font = "Bold 70px Arial";
     ctx.fillText("FIM DE JOGO", 15, tela.height / 2);
-    addEventListener("keydown", function(event)
-    {
-      event.preventDefault();
-      if (event.keyCode === 13) {
-        energia = 6;
-        quantInimigos = 10;
-        pontos = 0;
-        requestAnimationFrame(telaTitle);
-      }
-    });
     return;
+  }
+  if (energia <= 0) {
+    estado = "fim";
+    quantInimigos = 10;
+    energia = 6;
+    pontos = 0;
+    audios.play("explosao");
+    /*ctx.fillStyle = "red";
+    ctx.font = "Bold 70px Arial";
+    ctx.fillText("FIM DE JOGO", 15, tela.height / 2);
+    return;*/
   }
 
   for (var i = 0; i < spritesInimigos.length; i++) {
@@ -186,8 +186,6 @@ function passo(t)
     }
   }
 
-  telaJogo();
-
   sprite.desenhar(ctx,imagens.images["nave"]);
 
   for (var i = 0; i < spritesInimigos.length; i++) {
@@ -202,15 +200,23 @@ function passo(t)
   }
 
   anterior = t;
-  requestAnimationFrame(passo);
+  //requestAnimationFrame(passo);
 }
-
-limpaTela();
-requestAnimationFrame(telaTitle);
+requestAnimationFrame(passo);
 
 addEventListener("keydown", function(e)
 {
   switch (e.keyCode) {
+    case 13:
+    if(estado == "menu"){
+      telaJogo();
+      estado = "jogo";
+    }else if(estado == "fim"){
+      telaTitle();
+      estado = "menu";
+      return;
+    }
+    break;
     case 37:
     sprite.vx = -250;
     e.preventDefault();
