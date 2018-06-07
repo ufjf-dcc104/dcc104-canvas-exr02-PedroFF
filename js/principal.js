@@ -37,6 +37,7 @@ var btn1 = new Botao(150,300,200,70);
 var btn2 = new Botao(150,400,200,70);
 var btn3 = new Botao(150,500,200,70);
 var btn4 = new Botao(30,590,150,20);
+var input = document.createElement('input');
 
 for(var e = 0; e < quantInimigos; e++)
 {
@@ -108,6 +109,18 @@ function telaJogo()
   requestAnimationFrame(passo);
 }
 
+function salvarPontuacao() {
+  if(localStorage){
+    var retomaPont = JSON.parse(localStorage.getItem('pontuacao'));
+    var nome = document.querySelector('#nome').value;
+    retomaPont.push({'nome':nome , 'pontuacao': pontos});
+    localStorage.setItem('pontuacao',JSON.stringify(retomaPont));
+  }else{
+    var pontuacao = [{"nome":"Pedro", "pontuacao":300}];
+    localStorage.setItem('pontuacao', JSON.stringify(pontuacao));
+  }
+}
+
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -126,7 +139,17 @@ function passo(t)
   }else if(estado == "fim"){
     ctx.fillStyle = "red";
     ctx.font = "Bold 70px Arial";
-    ctx.fillText("FIM DE JOGO", 15, tela.height / 2);
+    ctx.fillText("FIM DE JOGO", 15, 225);
+  //  var input = document.createElement('input');
+    input.type = 'text';
+    input.id ='nome';
+    input.placeholder ='Digite seu nome';
+    input.style.position = 'fixed';
+    input.style.font ='18px arial';
+    input.style.left = '550px';
+    input.style.top = '325px';
+    document.body.appendChild(input);
+    input.focus();
     return;
   }else if(estado == "info"){
     telaSobre();
@@ -134,9 +157,6 @@ function passo(t)
   }
   if (energia <= 0) {
     estado = "fim";
-    quantInimigos = 10;
-    energia = 6;
-    pontos = 0;
     audios.play("explosao");
     /*ctx.fillStyle = "red";
     ctx.font = "Bold 70px Arial";
@@ -268,10 +288,16 @@ addEventListener("keydown", function(e)
     break;
     case 13:
     if(estado == "fim"){
+      salvarPontuacao();
+      document.body.removeChild(input);
+      input.value = "";
+      quantInimigos = 10;
+      energia = 6;
+      pontos = 0;
       telaTitle();
       estado = "menu";
-      return;
     }
+      return;
     break;
     case 27:
     if(estado == "info"){
