@@ -33,6 +33,10 @@ var corTiro = "yellow";
 var sprite = new Sprite();
 sprite.cdTiro = 0;
 var spritesInimigos = [];
+var btn1 = new Botao(150,300,200,70);
+var btn2 = new Botao(150,400,200,70);
+var btn3 = new Botao(150,500,200,70);
+var btn4 = new Botao(30,590,150,20);
 
 for(var e = 0; e < quantInimigos; e++)
 {
@@ -58,8 +62,10 @@ function telaSobre() {
   ctx.fillText("O objetivo do jogo é desviar dos asteróides e destruí-los,", 10, 250);
   ctx.fillText("para isso usará as setas para o movimento lateral e a", 10, 280);
   ctx.fillText("barra de espaço para disparar os tiros.", 10, 310);
-  ctx.fillText("Bom jogo!",200, 380);
-  ctx.fillText("Aperte Enter para voltar ao menu.", 140, 400);
+  ctx.fillText("Aperte ESC ou clique na seta, para voltar ao menu.", 10, 380);
+  ctx.fillText("Bom jogo!",200, 400);
+  ctx.fillRect(btn4.x,btn4.y, btn4.w, btn4.h);
+  imagens.draw(ctx,"voltar", 5, 550);
   requestAnimationFrame(passo);
 }
 function telaRank() {
@@ -67,15 +73,15 @@ function telaRank() {
 }
 function telaTitle()
 {
+
   ctx.fillStyle = "white";
   ctx.fillRect(0,0, tela.width, tela.height);
   imagens.draw(ctx,"backg", 0, 0);
   ctx.font="Bold 35px Arial";
   ctx.fillText("Bem-vindo ao Space Shooter", 5, 200);
-  /*ctx.font="18px Arial";
-  ctx.fillText("Iniciar Jogo", 200, 250);
-  ctx.fillText("Ranking", 200, 280);
-  ctx.fillText("Instruções", 200, 310);*/
+  ctx.fillRect(btn1.x,btn1.y, btn1.w, btn1.h);
+  ctx.fillRect(btn2.x,btn2.y, btn2.w, btn2.h);
+  ctx.fillRect(btn3.x,btn3.y, btn3.w, btn3.h);
   imagens.draw(ctx,"enter",150, 300);
   imagens.draw(ctx,"rank", 150, 400);
   imagens.draw(ctx,"info", 150, 500);
@@ -121,6 +127,9 @@ function passo(t)
     ctx.fillStyle = "red";
     ctx.font = "Bold 70px Arial";
     ctx.fillText("FIM DE JOGO", 15, tela.height / 2);
+    return;
+  }else if(estado == "info"){
+    telaSobre();
     return;
   }
   if (energia <= 0) {
@@ -227,17 +236,47 @@ function passo(t)
 }
 requestAnimationFrame(passo);
 
+tela.onclick = function(e){
+  var rectNav = tela.getBoundingClientRect();
+  var pos = {
+      x: e.clientX - rectNav.left,
+      y: e.clientY - rectNav.top
+  };
+  if (pos.x>btn1.x && pos.x<(btn1.x+btn1.w) && pos.y>btn1.y && pos.y<(btn1.y+btn1.h)){
+      telaJogo();
+      estado = "jogo";
+  } else if(pos.x>btn2.x && pos.x<(btn2.x+btn2.w) && pos.y>btn2.y && pos.y<(btn2.y+btn2.h)){
+      telaRank();
+      estado ="rank";
+  } else if(pos.x>btn3.x && pos.x<(btn3.x+btn3.w) && pos.y>btn3.y && pos.y<(btn3.y+btn3.h)){
+      telaSobre();
+      estado ="info";
+  } else if(pos.x>btn4.x && pos.x<(btn4.x+btn4.w) && pos.y>btn4.y && pos.y<(btn4.y+btn4.h)){
+      telaTitle();
+      estado ="menu";
+  }
+}
+
 addEventListener("keydown", function(e)
 {
   switch (e.keyCode) {
-    case 13:
+    case 78:
     if(estado == "menu"){
       telaJogo();
       estado = "jogo";
-    }else if(estado == "fim"){
+    }
+    break;
+    case 13:
+    if(estado == "fim"){
       telaTitle();
       estado = "menu";
       return;
+    }
+    break;
+    case 27:
+    if(estado == "info"){
+      telaTitle();
+      estado = "menu";
     }
     break;
     case 37:
