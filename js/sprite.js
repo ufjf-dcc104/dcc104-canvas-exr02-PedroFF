@@ -2,7 +2,7 @@ function Sprite() {
   //nave principal
     this.x = 200;
     this.y = 580;
-    this.w = 90;
+    this.w = 80;
     this.h = 60;
     this.vx = 0;
     this.vy = 0;
