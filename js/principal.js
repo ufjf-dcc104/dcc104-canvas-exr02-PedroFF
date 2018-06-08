@@ -20,9 +20,9 @@ audios.load("explosao", "sons/explosao.wav");
 audios.load("hit", "sons/Hit.wav");
 
 var estado = "menu";
-var dt = anterior = 0;
 var tiros = [];
 var vida = [];
+var dt = anterior = 0;
 var quantInimigos = 10;
 var energia = 6;
 var dano = false;
@@ -53,6 +53,21 @@ life.ix = getRandomIntInclusive(20, 480);
 life.iy = getRandomIntInclusive(-10000, -5000);
 vida.push(life);
 
+
+function ordenaRank() {
+  var retomaPont = JSON.parse(localStorage.getItem('pontuacao')||"[]");
+  retomaPont.sort(function (a,b) {
+    if(a.pontuacao > b.pontuacao){
+      return 1;
+    } else if (b.pontuacao > a.pontuacao) {
+      return -1;
+    }else {
+      return 0;
+    }
+
+  });
+}
+
 function telaSobre() {
   ctx.fillStyle = "white";
   ctx.fillRect(0,0, tela.width, tela.height);
@@ -70,7 +85,36 @@ function telaSobre() {
   requestAnimationFrame(passo);
 }
 function telaRank() {
+  ctx.fillStyle = "white";
+  ctx.fillRect(0,0, tela.width, tela.height);
+  imagens.draw(ctx,"backg", 0, 0);
+  ctx.font="Bold 70px Arial";
+  ctx.fillText("Rank", 150, 100);
+  ordenaRank();
+  var retomaPont = JSON.parse(localStorage.getItem('pontuacao'));
+  if(retomaPont != null){
+    ctx.font="Bold 35px Arial";
+    ctx.fillText("NOME", 100, 200);
+    ctx.fillText("SCORE", 280, 200);
+    var j = 50
+    for (var i = 0; i < 5 || i < retomaPont.length; i++) {
+      ctx.fillText(1+i +". " + retomaPont[i].nome, 100, 200+j);
+      ctx.fillText(retomaPont[i].pontuacao, 280, 200+j);
+      j+=50;
+    }
+  }else{
+    var pontuacao = [{"nome":"Pedro", "pontuacao":300}];
+    localStorage.setItem('pontuacao', JSON.stringify(pontuacao));
+    ctx.font="Bold 35px Arial";
+    ctx.fillText("NOME", 100, 200);
+    ctx.fillText("SCORE", 280, 200);
+    var j = 50
+    ctx.fillText("1. " + retomaPont[1].nome, 100, 200+j);
+    ctx.fillText(retomaPont[1].pontuacao, 280, 200+j);
+  }
 
+  ctx.fillRect(btn4.x,btn4.y, btn4.w, btn4.h);
+  imagens.draw(ctx,"voltar", 5, 550);
 }
 function telaTitle()
 {
@@ -153,6 +197,9 @@ function passo(t)
     return;
   }else if(estado == "info"){
     telaSobre();
+    return;
+  }else if (estado == "rank") {
+    telaRank();
     return;
   }
   if (energia <= 0) {
@@ -291,9 +338,13 @@ addEventListener("keydown", function(e)
       salvarPontuacao();
       document.body.removeChild(input);
       input.value = "";
+      dt = anterior = 0;
       quantInimigos = 10;
       energia = 6;
+      dano = false;
       pontos = 0;
+      aumentarQuant = 0;
+      cadencia = 0.5;
       telaTitle();
       estado = "menu";
     }
