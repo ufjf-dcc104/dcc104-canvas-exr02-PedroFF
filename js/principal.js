@@ -230,6 +230,10 @@ addEventListener("keydown", function(e)
       input.value = "";
       dt = anterior = 0;
       quantInimigos = 10;
+      for (var i = 0; i < spritesInimigos.length; i++) {
+        spritesInimigos[i].ivy = 200;
+      }
+
       energia = 6;
       dano = false;
       pontos = 0;

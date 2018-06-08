@@ -1,6 +1,6 @@
 function Sprite() {
   //nave principal
-    this.x = 200;
+    this.x = 180;
     this.y = 580;
     this.w = 80;
     this.h = 60;
@@ -13,7 +13,7 @@ function Sprite() {
   //asteroides
    this.ix = 100;
    this.iy = 10;
-   this.iw = 65;
+   this.iw = 55;
    this.ih = 40;
    this.ivx = 0;
    this.ivy = 200;
