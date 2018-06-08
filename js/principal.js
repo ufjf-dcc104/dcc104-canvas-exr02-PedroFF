@@ -97,7 +97,7 @@ function telaRank() {
     ctx.fillText("NOME", 100, 200);
     ctx.fillText("SCORE", 280, 200);
     var j = 50
-    for (var i = 0; i < 5 || i < retomaPont.length; i++) {
+    for (var i = 0; i < retomaPont.length && i <= 5; i++) {
       ctx.fillText(1+i +". " + retomaPont[i].nome, 100, 200+j);
       ctx.fillText(retomaPont[i].pontuacao, 280, 200+j);
       j+=50;
@@ -105,12 +105,13 @@ function telaRank() {
   }else{
     var pontuacao = [{"nome":"Pedro", "pontuacao":300}];
     localStorage.setItem('pontuacao', JSON.stringify(pontuacao));
+    var retomaPont = JSON.parse(localStorage.getItem('pontuacao'));
     ctx.font="Bold 35px Arial";
     ctx.fillText("NOME", 100, 200);
     ctx.fillText("SCORE", 280, 200);
     var j = 50
-    ctx.fillText("1. " + retomaPont[1].nome, 100, 200+j);
-    ctx.fillText(retomaPont[1].pontuacao, 280, 200+j);
+    ctx.fillText("1. " + retomaPont[0].nome, 100, 200+j);
+    ctx.fillText(retomaPont[0].pontuacao, 280, 200+j);
   }
 
   ctx.fillRect(btn4.x,btn4.y, btn4.w, btn4.h);
