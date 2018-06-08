@@ -76,7 +76,7 @@ Sprite.prototype.impoeLimites = function (x, y, w, h) {
   }
 }
 
-Sprite.prototype.acertou = function (alvo)
+Sprite.prototype.acertouTiro = function (alvo)
 {
   if (alvo.ix + alvo.iw < this.x + 50) return false;
   if (alvo.ix > this.x + 50 + this.w) return false;

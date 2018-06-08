@@ -22,6 +22,7 @@ audios.load("hit", "sons/Hit.wav");
 //  --- Variáveis ---
 var estado = "menu";
 var tiros = [];
+var tiroEspecial = [];
 var vida = [];
 var dt = anterior = 0;
 var quantInimigos = 10;
@@ -49,12 +50,17 @@ for(var e = 0; e < quantInimigos; e++)
   spritesInimigos.push(enemy);
 }
 
-// --- Criando nave ---
+// --- Criando Vida ---
 var life = new Sprite();
 life.ix = getRandomIntInclusive(20, 480);
 life.iy = getRandomIntInclusive(-10000, -5000);
 vida.push(life);
 
+//  --- Criando tiro especial ---
+var tiroE = new Sprite();
+life.ix = getRandomIntInclusive(20, 480);
+life.iy = getRandomIntInclusive(-10000, -5000);
+tiroEspecial.push(tiroE);
 
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
@@ -112,6 +118,13 @@ function passo(t)
     }
   }
 
+  for (var i = 0; i < tiroE.length; i++) {
+    if (tiroE[i].limiteInimigos(0,0, tela.width, tela.height)) {
+      tiroE[i].iy = getRandomIntInclusive(-10000, -5000);
+      tiroE[i].ix = getRandomIntInclusive(20, 480);
+    }
+  }
+
   for (var i = 0; i < tiros.length; i++) {
     if(tiros[i].limiteTiros(0,0,tela.width,tela.height)){
       tiros[i].vy = 0;
@@ -139,10 +152,12 @@ function passo(t)
   for (var i = 0; i < tiros.length; i++) {
     tiros[i].mover(dt);
     for (var j = 0; j < spritesInimigos.length; j++) {
-      if(tiros[i].acertou(spritesInimigos[j]))
+      if(tiros[i].acertouTiro(spritesInimigos[j]))
       {
         spritesInimigos[j].ix = 10000;
         spritesInimigos[j].iy = 10000;
+        tiros[i].x = 10000;
+        tiros[i].y = 10000;
         pontos++;
 
         if(aumentarQuant < 15)
