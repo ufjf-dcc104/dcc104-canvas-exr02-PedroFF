@@ -55,17 +55,11 @@ vida.push(life);
 
 
 function ordenaRank() {
-  var retomaPont = JSON.parse(localStorage.getItem('pontuacao')||"[]");
-  retomaPont.sort(function (a,b) {
-    if(a.pontuacao > b.pontuacao){
-      return 1;
-    } else if (b.pontuacao > a.pontuacao) {
-      return -1;
-    }else {
-      return 0;
-    }
-
-  });
+  var retomaPont = localStorage.getItem('pontuacao');
+  if(retomaPont!= null && retomaPont.length >= 1){
+    retomaPont.sort(compare);
+    localStorage.setItem('pontuacao',retomaPont);
+  }
 }
 
 function telaSobre() {
@@ -84,19 +78,27 @@ function telaSobre() {
   imagens.draw(ctx,"voltar", 5, 550);
   requestAnimationFrame(passo);
 }
+function compare(a,b) {
+  if (a.pontuacao > b.pontuacao)
+     return -1;
+  if (a.pontuacao < b.pontuacao)
+    return 1;
+  return 0;
+}
 function telaRank() {
+  var retomaPont = localStorage.getItem('pontuacao');
   ctx.fillStyle = "white";
   ctx.fillRect(0,0, tela.width, tela.height);
   imagens.draw(ctx,"backg", 0, 0);
   ctx.font="Bold 70px Arial";
   ctx.fillText("Rank", 150, 100);
+  if(retomaPont!= null){
   ordenaRank();
-  var retomaPont = JSON.parse(localStorage.getItem('pontuacao'));
-  if(retomaPont != null){
     ctx.font="Bold 35px Arial";
     ctx.fillText("NOME", 100, 200);
     ctx.fillText("SCORE", 280, 200);
     var j = 50
+
     for (var i = 0; i < retomaPont.length && i <= 5; i++) {
       ctx.fillText(1+i +". " + retomaPont[i].nome, 100, 200+j);
       ctx.fillText(retomaPont[i].pontuacao, 280, 200+j);
@@ -116,6 +118,7 @@ function telaRank() {
 
   ctx.fillRect(btn4.x,btn4.y, btn4.w, btn4.h);
   imagens.draw(ctx,"voltar", 5, 550);
+  return;
 }
 function telaTitle()
 {
@@ -155,14 +158,16 @@ function telaJogo()
 }
 
 function salvarPontuacao() {
-  if(localStorage){
-    var retomaPont = JSON.parse(localStorage.getItem('pontuacao'));
+  var retomaPont = localStorage.getItem('pontuacao');
+  if(retomaPont != null){
     var nome = document.querySelector('#nome').value;
     retomaPont.push({'nome':nome , 'pontuacao': pontos});
     localStorage.setItem('pontuacao',JSON.stringify(retomaPont));
   }else{
-    var pontuacao = [{"nome":"Pedro", "pontuacao":300}];
-    localStorage.setItem('pontuacao', JSON.stringify(pontuacao));
+    var pont =[];
+    var nome = document.querySelector('#nome').value;
+    pont.push({'nome':nome , 'pontuacao': pontos});
+    localStorage.setItem('pontuacao',JSON.stringify(pont));
   }
 }
 
@@ -310,19 +315,23 @@ tela.onclick = function(e){
       x: e.clientX - rectNav.left,
       y: e.clientY - rectNav.top
   };
-  if (pos.x>btn1.x && pos.x<(btn1.x+btn1.w) && pos.y>btn1.y && pos.y<(btn1.y+btn1.h)){
-      telaJogo();
-      estado = "jogo";
-  } else if(pos.x>btn2.x && pos.x<(btn2.x+btn2.w) && pos.y>btn2.y && pos.y<(btn2.y+btn2.h)){
-      telaRank();
-      estado ="rank";
-  } else if(pos.x>btn3.x && pos.x<(btn3.x+btn3.w) && pos.y>btn3.y && pos.y<(btn3.y+btn3.h)){
-      telaSobre();
-      estado ="info";
-  } else if(pos.x>btn4.x && pos.x<(btn4.x+btn4.w) && pos.y>btn4.y && pos.y<(btn4.y+btn4.h)){
+  if(estado == "menu"){
+    if (pos.x>btn1.x && pos.x<(btn1.x+btn1.w) && pos.y>btn1.y && pos.y<(btn1.y+btn1.h)){
+        telaJogo();
+        estado = "jogo";
+      } else if(pos.x>btn2.x && pos.x<(btn2.x+btn2.w) && pos.y>btn2.y && pos.y<(btn2.y+btn2.h)){
+        telaRank();
+        estado ="rank";
+      } else if(pos.x>btn3.x && pos.x<(btn3.x+btn3.w) && pos.y>btn3.y && pos.y<(btn3.y+btn3.h)){
+        telaSobre();
+        estado ="info";
+      }
+  } else if (estado == "info" || estado == "rank") {
+      if(pos.x>btn4.x && pos.x<(btn4.x+btn4.w) && pos.y>btn4.y && pos.y<(btn4.y+btn4.h)){
       telaTitle();
       estado ="menu";
-  }
+      }
+    }
 }
 
 addEventListener("keydown", function(e)
