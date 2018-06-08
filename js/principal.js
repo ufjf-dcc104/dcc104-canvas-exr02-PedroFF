@@ -19,6 +19,7 @@ audios.load("vida", "sons/vida.wav");
 audios.load("explosao", "sons/explosao.wav");
 audios.load("hit", "sons/Hit.wav");
 
+//  --- Variáveis ---
 var estado = "menu";
 var tiros = [];
 var vida = [];
@@ -39,6 +40,7 @@ var btn3 = new Botao(150,500,200,70);
 var btn4 = new Botao(30,590,150,20);
 var input = document.createElement('input');
 
+// --- Criando inimigos ---
 for(var e = 0; e < quantInimigos; e++)
 {
   var enemy = new Sprite();
@@ -47,129 +49,12 @@ for(var e = 0; e < quantInimigos; e++)
   spritesInimigos.push(enemy);
 }
 
-
+// --- Criando nave ---
 var life = new Sprite();
 life.ix = getRandomIntInclusive(20, 480);
 life.iy = getRandomIntInclusive(-10000, -5000);
 vida.push(life);
 
-
-function ordenaRank() {
-  var retomaPont = localStorage.getItem('pontuacao');
-  if(retomaPont!= null && retomaPont.length >= 1){
-    retomaPont.sort(compare);
-    localStorage.setItem('pontuacao',retomaPont);
-  }
-}
-
-function telaSobre() {
-  ctx.fillStyle = "white";
-  ctx.fillRect(0,0, tela.width, tela.height);
-  imagens.draw(ctx,"backg", 0, 0);
-  ctx.font="Bold 35px Arial";
-  ctx.fillText("Bem-vindo ao Space Shooter", 5, 200);
-  ctx.font="18px Arial";
-  ctx.fillText("O objetivo do jogo é desviar dos asteróides e destruí-los,", 10, 250);
-  ctx.fillText("para isso usará as setas para o movimento lateral e a", 10, 280);
-  ctx.fillText("barra de espaço para disparar os tiros.", 10, 310);
-  ctx.fillText("Aperte ESC ou clique na seta, para voltar ao menu.", 10, 380);
-  ctx.fillText("Bom jogo!",200, 400);
-  ctx.fillRect(btn4.x,btn4.y, btn4.w, btn4.h);
-  imagens.draw(ctx,"voltar", 5, 550);
-  requestAnimationFrame(passo);
-}
-function compare(a,b) {
-  if (a.pontuacao > b.pontuacao)
-     return -1;
-  if (a.pontuacao < b.pontuacao)
-    return 1;
-  return 0;
-}
-function telaRank() {
-  var retomaPont = localStorage.getItem('pontuacao');
-  ctx.fillStyle = "white";
-  ctx.fillRect(0,0, tela.width, tela.height);
-  imagens.draw(ctx,"backg", 0, 0);
-  ctx.font="Bold 70px Arial";
-  ctx.fillText("Rank", 150, 100);
-  if(retomaPont!= null){
-  ordenaRank();
-    ctx.font="Bold 35px Arial";
-    ctx.fillText("NOME", 100, 200);
-    ctx.fillText("SCORE", 280, 200);
-    var j = 50
-
-    for (var i = 0; i < retomaPont.length && i <= 5; i++) {
-      ctx.fillText(1+i +". " + retomaPont[i].nome, 100, 200+j);
-      ctx.fillText(retomaPont[i].pontuacao, 280, 200+j);
-      j+=50;
-    }
-  }else{
-    var pontuacao = [{"nome":"Pedro", "pontuacao":300}];
-    localStorage.setItem('pontuacao', JSON.stringify(pontuacao));
-    var retomaPont = JSON.parse(localStorage.getItem('pontuacao'));
-    ctx.font="Bold 35px Arial";
-    ctx.fillText("NOME", 100, 200);
-    ctx.fillText("SCORE", 280, 200);
-    var j = 50
-    ctx.fillText("1. " + retomaPont[0].nome, 100, 200+j);
-    ctx.fillText(retomaPont[0].pontuacao, 280, 200+j);
-  }
-
-  ctx.fillRect(btn4.x,btn4.y, btn4.w, btn4.h);
-  imagens.draw(ctx,"voltar", 5, 550);
-  return;
-}
-function telaTitle()
-{
-
-  ctx.fillStyle = "white";
-  ctx.fillRect(0,0, tela.width, tela.height);
-  imagens.draw(ctx,"backg", 0, 0);
-  ctx.font="Bold 35px Arial";
-  ctx.fillText("Bem-vindo ao Space Shooter", 5, 200);
-  ctx.fillRect(btn1.x,btn1.y, btn1.w, btn1.h);
-  ctx.fillRect(btn2.x,btn2.y, btn2.w, btn2.h);
-  ctx.fillRect(btn3.x,btn3.y, btn3.w, btn3.h);
-  imagens.draw(ctx,"enter",150, 300);
-  imagens.draw(ctx,"rank", 150, 400);
-  imagens.draw(ctx,"info", 150, 500);
-
-
-  requestAnimationFrame(passo);
-}
-
-
-function limpaTela() {
-  ctx.fillStyle = "grey";
-  ctx.fillRect(0, 0, tela.width, tela.height);
-}
-
-function telaJogo()
-{
-  ctx.fillStyle = "black";
-  ctx.fillRect(0,0, tela.width, tela.height);
-  ctx.font="20px Arial";
-  imagens.draw(ctx,"backg", 0, 0);
-  ctx.fillStyle = "white";
-  ctx.fillText("Energia: " + energia, 10,20);
-  ctx.fillText("Pontos: " + pontos, 10,50);
-  requestAnimationFrame(passo);
-}
-
-function salvarPontuacao() {
-  var retomaPont = localStorage.getItem('pontuacao');
-  if(retomaPont != null){
-    var nome = document.querySelector('#nome').value;
-    retomaPont.push({'nome':nome , 'pontuacao': pontos});
-    localStorage.setItem('pontuacao',JSON.stringify(retomaPont));
-  }else{
-    var pont =[];
-    var nome = document.querySelector('#nome').value;
-    pont.push({'nome':nome , 'pontuacao': pontos});
-    localStorage.setItem('pontuacao',JSON.stringify(pont));
-  }
-}
 
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
@@ -190,11 +75,10 @@ function passo(t)
     ctx.fillStyle = "red";
     ctx.font = "Bold 70px Arial";
     ctx.fillText("FIM DE JOGO", 15, 225);
-  //  var input = document.createElement('input');
     input.type = 'text';
     input.id ='nome';
     input.placeholder ='Digite seu nome';
-    input.style.position = 'fixed';
+    input.style.position = 'absolute';
     input.style.font ='18px arial';
     input.style.left = '550px';
     input.style.top = '325px';
@@ -211,10 +95,6 @@ function passo(t)
   if (energia <= 0) {
     estado = "fim";
     audios.play("explosao");
-    /*ctx.fillStyle = "red";
-    ctx.font = "Bold 70px Arial";
-    ctx.fillText("FIM DE JOGO", 15, tela.height / 2);
-    return;*/
   }
 
   for (var i = 0; i < spritesInimigos.length; i++) {
