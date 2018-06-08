@@ -21,9 +21,9 @@ function telaRank() {
   imagens.draw(ctx,"backg", 0, 0);
   ctx.font="Bold 70px Arial";
   ctx.fillText("Rank", 150, 100);
-  ordenaRank();
-  var retomaPont = JSON.parse(localStorage.getItem('pontuacao'));
-  if(retomaPont != null){
+  if(localStorage.getItem('pontuacao') != null){
+    ordenaRank();
+    var retomaPont = JSON.parse(localStorage.getItem('pontuacao'));
     ctx.font="Bold 35px Arial";
     ctx.fillText("NOME", 100, 200);
     ctx.fillText("SCORE", 280, 200);
@@ -83,7 +83,7 @@ function telaJogo()
 // --- Funções que tratam os pontos ---
 
 function salvarPontuacao() {
-  if(localStorage){
+  if(localStorage.getItem('pontuacao') != null){
     var retomaPont = JSON.parse(localStorage.getItem('pontuacao'));
     var nome = document.querySelector('#nome').value;
     retomaPont.push({'nome':nome , 'pontuacao': pontos});
@@ -104,9 +104,9 @@ function compare(a,b) {
 
 
 function ordenaRank() {
-  var retomaPont = JSON.parse(localStorage.getItem('pontuacao'));
-  if(retomaPont!= null && retomaPont.length >= 1){
+  if(localStorage.getItem('pontuacao') != null){
+    var retomaPont = JSON.parse(localStorage.getItem('pontuacao'));
     retomaPont.sort(compare);
-    localStorage.setItem('pontuacao',retomaPont);
+    localStorage.setItem('pontuacao', JSON.stringify(retomaPont));
   }
 }
